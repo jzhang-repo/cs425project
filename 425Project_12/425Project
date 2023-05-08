@@ -1,0 +1,100 @@
+CREATE TABLE Agent ( 
+  email VARCHAR(100) UNIQUE NOT NULL,
+  
+  job_title VARCHAR(100),
+  real_estate_agency VARCHAR(50) NOT NULL,
+  contact INTEGER(100) NOT NULL,
+  location VARCHAR(250) NOT NULL,
+  PRIMARY KEY(email)
+);
+
+CREATE TABLE Renter (
+  email VARCHAR(100) UNIQUE NOT NULL,
+  first_name VARCHAR(50) NOT NULL,
+  last_name VARCHAR(50) NOT NULL,
+  move_in_date VARCHAR(50) NOT NULL,
+  budget numeric(10,2) NOT NULL,
+  location VARCHAR(250) NOT NULL,
+  PRIMARY KEY(email),
+  FOREIGN KEY (email) REFERENCES Booking
+);
+
+CREATE TABLE Property (
+  pid CHAR(10),
+  name VARCHAR(100) NOT NULL,
+  location VARCHAR(50) NOT NULL,
+  state VARCHAR(50) NOT NULL,
+  city VARCHAR(50) NOT NULL,
+  price NUMERIC(10, 2) NOT NULL,
+  availability VARCHAR(50) NOT NULL,
+  neighborhood VARCHAR(50) NOT NULL,
+  PRIMARY KEY(pid),
+  FOREIGN KEY (pid) REFERENCES neighborhood
+);
+
+CREATE TABLE Apartment (
+  pid CHAR(10),
+  location VARCHAR(50) NOT NULL,
+  building_type VARCHAR(50) NOT NULL,
+  sqr_footage INTEGER(100) NOT NULL,
+  PRIMARY KEY(pid),
+  FOREIGN KEY(pid) references Property
+);
+
+CREATE TABLE House (
+  pid CHAR(10),
+  room INTEGER(100) NOT NULL,
+  location VARCHAR(50) NOT NULL,
+  sqr_footage INTEGER(100) NOT NULL,
+  PRIMARY KEY(pid),
+  FOREIGN KEY(pid) references Property
+);
+
+CREATE TABLE CommercialBuilding (
+  pid CHAR(10),
+  location VARCHAR(50) NOT NULL,
+  business_type VARCHAR(50) NOT NULL,
+  sqr_footage INTEGER(100) NOT NULL,
+  PRIMARY KEY(pid),
+  FOREIGN KEY(pid) references Property
+);
+
+CREATE TABLE neighborhood (
+  pid CHAR(10),
+  school VARCHAR(50) NOT NULL,
+  address VARCHAR(50) NOT NULL,
+  crime_rate INTEGER(100) NOT NULL,
+  PRIMARY KEY(pid)
+);
+
+CREATE TABLE Booking (
+  pid CHAR(10),
+  bid CHAR(10),
+  email VARCHAR(100) UNIQUE NOT NULL,
+  booking_date VARCHAR(50) NOT NULL,
+  credit_card INTEGER(100) NOT NULL,
+  PRIMARY KEY(pid),
+  PRIMARY KEY(bid),
+  FOREIGN KEY(bid) references PaymentInfo
+);
+
+CREATE TABLE PaymentInfo (
+  pid CHAR(10),
+  bid CHAR(10),
+  credit_card INTEGER(100) NOT NULL,
+  bank_acct_no INTEGER(100) NOT NULL, 
+  bank_rout_no INTEGER(100) NOT NULL,
+  PRIMARY KEY(pid),
+  PRIMARY KEY(bid),
+  FOREIGN KEY (pid) REFERENCES Booking
+);
+
+CREATE TABLE RewardProgram (
+  pid CHAR(10),
+  bid CHAR(10),
+  reward_point numeric(10,2) NOT NULL,
+  PRIMARY KEY(pid),
+  PRIMARY KEY(bid),
+  FOREIGN KEY (pid) REFERENCES Property,
+  FOREIGN KEY (bid) REFERENCES Booking
+);
